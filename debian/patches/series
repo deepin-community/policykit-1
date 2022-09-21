@@ -82,3 +82,4 @@ deepin_014_fix_clear_g_loop_object.patch
 deepin_015_fix_use_difference_authenticate.patch
 fix-016-remove-dependencies.patch
 deepin_017_fix_modify_check_verify.patch
+uniontech001-fix-support-username-is-only-number.patch
