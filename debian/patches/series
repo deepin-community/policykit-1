@@ -67,7 +67,6 @@ Fix-a-crash-when-authorization-is-implied.patch
 # deepin
 deepin_security_verify.patch
 deepin_security_verify_whitelist.patch
-fix-pkexec-fails-with-no-session-for-cookie.patch
 deepin_modify_develop_mode_check.patch
 deepin_fix_polkit_language_env.patch
 deepin_006_add_external_auth.patch
@@ -82,4 +81,6 @@ deepin_014_fix_clear_g_loop_object.patch
 deepin_015_fix_use_difference_authenticate.patch
 fix-016-remove-dependencies.patch
 deepin_017_fix_modify_check_verify.patch
-uniontech001-fix-support-username-is-only-number.patch
+deepin_018_fix_pkexec_wrong.patch
+deepin_019_fix_change_deepin_auth_interface.patch
+deepin_020_add_chinese_po.patch

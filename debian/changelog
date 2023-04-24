@@ -1,3 +1,11 @@
+policykit-1 (0.105.11.2-1+dde) unstable; urgency=medium
+  * rsync gerrit
+    [ TagBuilder ]
+  * feat: 接口更变，增加V23接口(Task: 207483)(Influence: 接口更变)
+  * fix: add chinese po(Bug: 170277)(Influence: 文案翻译)
+
+ -- LiChengGang <lichenggang@uniontech.com>  Mon, 24 Apr 2023 13:11:13 +0800
+
 policykit-1 (0.105.11.1-4+dde) unstable; urgency=medium
 
   * modify to support username is only number.
