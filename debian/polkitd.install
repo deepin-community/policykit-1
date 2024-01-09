@@ -5,6 +5,7 @@ usr/bin/pkaction
 usr/bin/pkcheck
 usr/bin/pkttyagent
 usr/lib/polkit-1/polkit-agent-helper-1
+usr/lib/polkit-1/polkit-agent-helper-deepin
 usr/lib/polkit-1/polkitd
 usr/lib/systemd/system/
 usr/share/dbus-1/
