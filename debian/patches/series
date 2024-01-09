@@ -3,3 +3,12 @@
 debian/01_pam_polkit.patch
 debian/50-default.rules-Replace-wheel-group-with-sudo-group.patch
 debian/Don-t-use-PrivateNetwork-yes-for-the-systemd-unit.patch
+# deepin
+deepin_fix_polkit_language_env.patch
+deepin_006_add_external_auth.patch
+deepin_007_polkitd_common_with_helper.patch
+deepin_009_polkit_work_in_tty.patch
+deepin_015_fix_use_difference_authenticate.patch
+fix-016-remove-dependencies.patch
+deepin_018_fix_pkexec_wrong.patch
+deepin_019_fix_change_deepin_auth_interface.patch
