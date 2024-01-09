@@ -1,0 +1,25 @@
+From: Simon McVittie <smcv@debian.org>
+Date: Wed, 2 Aug 2023 11:41:24 +0100
+Subject: Don't use PrivateNetwork=yes for the systemd unit
+
+This causes systemd to fail to start the service inside an lxc
+container, which is an important use-case for Debian because our
+automated test infrastructure currently relies on lxc.
+
+Bug-Debian: https://bugs.debian.org/1042880
+---
+ data/polkit.service.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/data/polkit.service.in b/data/polkit.service.in
+index 2113ff7..dbd1ef7 100644
+--- a/data/polkit.service.in
++++ b/data/polkit.service.in
+@@ -17,7 +17,6 @@ LockPersonality=yes
+ MemoryDenyWriteExecute=yes
+ NoNewPrivileges=yes
+ PrivateDevices=yes
+-PrivateNetwork=yes
+ PrivateTmp=yes
+ ProtectControlGroups=yes
+ ProtectHome=yes
