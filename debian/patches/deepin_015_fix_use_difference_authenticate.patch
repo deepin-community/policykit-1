@@ -83,7 +83,7 @@ Index: policykit-1/src/polkitagent/polkitagentsession.c
  
 -  gchar *ex_auth = polkit_details_lookup(session->details, "exAuth");
 -
--  helper_argv[0] = PACKAGE_PREFIX "/polkit-agent-helper-deepin";
+-  helper_argv[0] = PACKAGE_PREFIX "/lib/polkit-1/polkit-agent-helper-deepin";
 -  helper_argv[1] = passwd->pw_name;
 -  helper_argv[2] = session->cookie;
 -  helper_argv[3] = ex_auth ? g_strdup(polkit_details_lookup(session->details, "exAuthFlags")) : g_strdup("-1");
@@ -109,7 +109,7 @@ Index: policykit-1/src/polkitagent/polkitagentsession.c
 +    {
 +      session->deepin_authentication_ok = TRUE;
 +      helper_argv = g_malloc(sizeof(gchar *) * 5);
-+      helper_argv[0] = PACKAGE_PREFIX "/polkit-agent-helper-deepin";
++      helper_argv[0] = PACKAGE_PREFIX "/lib/polkit-1/polkit-agent-helper-deepin";
 +      helper_argv[2] = session->cookie;
 +      helper_argv[3] = ex_auth ? g_strdup(polkit_details_lookup(session->details, "exAuthFlags")) : g_strdup("-1");
 +      helper_argv[4] = NULL;
@@ -118,7 +118,7 @@ Index: policykit-1/src/polkitagent/polkitagentsession.c
 +    {
 +      session->deepin_authentication_ok = FALSE;
 +      helper_argv = g_malloc(sizeof(gchar *) * 3);
-+      helper_argv[0] = PACKAGE_PREFIX "/polkit-agent-helper-1";
++      helper_argv[0] = PACKAGE_PREFIX "/lib/polkit-1/polkit-agent-helper-1";
 +      helper_argv[2] = NULL;
 +    }
 +
