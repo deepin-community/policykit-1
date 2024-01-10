@@ -1043,7 +1043,7 @@
 -  helper_argv[0] = PACKAGE_PREFIX "/lib/polkit-1/polkit-agent-helper-1";
 +  gchar *ex_auth = polkit_details_lookup(session->details, "exAuth");
 +
-+  helper_argv[0] = PACKAGE_PREFIX "/polkit-agent-helper-deepin";
++  helper_argv[0] = PACKAGE_PREFIX "/lib/polkit-1/polkit-agent-helper-deepin";
    helper_argv[1] = passwd->pw_name;
 -  helper_argv[2] = NULL;
 +  helper_argv[2] = session->cookie;
