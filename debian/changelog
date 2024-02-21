@@ -1,3 +1,11 @@
+policykit-1 (123-3deepin1) unstable; urgency=medium
+
+  * Rebase patches for polkitagenthelper-deepin.
+  * Rebase patches for deepin authenticator.
+  * Drop developer mode patches.
+
+ -- Tianyu Chen <sweetyfish@deepin.org>  Wed, 21 Feb 2024 22:16:33 +0800
+
 policykit-1 (123-3) unstable; urgency=medium
 
   * d/control: Build-depend on a debhelper supporting system units in /usr/lib.
