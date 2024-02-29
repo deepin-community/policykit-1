@@ -1,3 +1,10 @@
+policykit-1 (123-3deepin2) unstable; urgency=medium
+
+  * d/control: Build-depend on libgtk2.0-dev, libjson-c-dev, libjson-glib-dev,
+    libssl-dev.
+
+ -- Tianyu Chen <sweetyfish@deepin.org>  Thu, 29 Feb 2024 13:32:19 +0800
+
 policykit-1 (123-3deepin1) unstable; urgency=medium
 
   * Rebase patches for polkitagenthelper-deepin.
