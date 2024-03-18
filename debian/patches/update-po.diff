@@ -1,0 +1,392 @@
+Description: po: Update authentication messages
+ $(program) -> $(cmdline_short)
+Author: Tianyu Chen <sweetyfish@deepin.org>
+Bug-Deepin: https://github.com/linuxdeepin/developer-center/issues/7520
+Forwarded: https://github.com/polkit-org/polkit/pull/438
+# Applied-Upstream: <version|URL|commit, identifies patches merged upstream, optional>
+Last-Update: 2024-03-18
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+diff --git a/po/da.po b/po/da.po
+index 9af1b24..29856a8 100644
+--- a/po/da.po
++++ b/po/da.po
+@@ -156,8 +156,8 @@ msgstr "%s: Emne ikke angivet\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:790
+-msgid "Authentication is needed to run `$(program)' as the super user"
+-msgstr "Der kræves autentifikation for at køre `$(program)' som superbrugeren"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
++msgstr "Der kræves autentifikation for at køre `$(cmdline_short)' som superbrugeren"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -165,9 +165,9 @@ msgstr "Der kræves autentifikation for at køre `$(program)' som superbrugeren"
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:800
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"Der kræves autentifikation for at køre `$(program)' som brugeren "
++"Der kræves autentifikation for at køre `$(cmdline_short)' som brugeren "
+ "$(user.display)"
+ 
+ #: ../src/programs/pkttyagent.c:45
+diff --git a/po/hr.po b/po/hr.po
+index 6aa23d0..2d836dd 100644
+--- a/po/hr.po
++++ b/po/hr.po
+@@ -157,8 +157,8 @@ msgstr "%s: Subjekt nije određen\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:797
+-msgid "Authentication is needed to run `$(program)' as the super user"
+-msgstr "Potrebna je ovjera za pokretanje `$(program)' kao super korisnika"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
++msgstr "Potrebna je ovjera za pokretanje `$(cmdline_short)' kao super korisnika"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -166,9 +166,9 @@ msgstr "Potrebna je ovjera za pokretanje `$(program)' kao super korisnika"
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:807
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"Potrebna je ovjera za pokretanje `$(program)' kao korisnika $(user.display)"
++"Potrebna je ovjera za pokretanje `$(cmdline_short)' kao korisnika $(user.display)"
+ 
+ #: ../src/programs/pkttyagent.c:45
+ msgid "Don't replace existing agent if any"
+diff --git a/po/hu.po b/po/hu.po
+index 1c119f1..1873e2b 100644
+--- a/po/hu.po
++++ b/po/hu.po
+@@ -166,8 +166,8 @@ msgstr "%s: Nincs megadva az alany\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:790
+-msgid "Authentication is needed to run `$(program)' as the super user"
+-msgstr "Hitelesítés szükséges a(z) „$(program)” futtatásához rendszergazdaként"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
++msgstr "Hitelesítés szükséges a(z) „$(cmdline_short)” futtatásához rendszergazdaként"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -175,9 +175,9 @@ msgstr "Hitelesítés szükséges a(z) „$(program)” futtatásához rendszerg
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:800
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"Hitelesítés szükséges a(z) „$(program)” futtatásához $(user.display) "
++"Hitelesítés szükséges a(z) „$(cmdline_short)” futtatásához $(user.display) "
+ "felhasználóként"
+ 
+ #: ../src/programs/pkttyagent.c:78
+diff --git a/po/id.po b/po/id.po
+index dbbb070..8902ecd 100644
+--- a/po/id.po
++++ b/po/id.po
+@@ -155,9 +155,9 @@ msgstr "%s: Subyek tidak dispesifikasikan\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:790
+-msgid "Authentication is needed to run `$(program)' as the super user"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
+ msgstr ""
+-"Otentikasi dibutuhkan untuk menjalankan `$(program)' sebagai super user"
++"Otentikasi dibutuhkan untuk menjalankan `$(cmdline_short)' sebagai super user"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -165,9 +165,9 @@ msgstr ""
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:800
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"Otentikasi dibutuhkan untuk menjalankan `$(program)' sebagai pengguna $(user."
++"Otentikasi dibutuhkan untuk menjalankan `$(cmdline_short)' sebagai pengguna $(user."
+ "display)"
+ 
+ #: ../src/programs/pkttyagent.c:78
+diff --git a/po/it.po b/po/it.po
+index b1667fc..fd9ccd3 100644
+--- a/po/it.po
++++ b/po/it.po
+@@ -164,8 +164,8 @@ msgstr "%s: oggetto non specificato\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:790
+-msgid "Authentication is needed to run `$(program)' as the super user"
+-msgstr "È richiesto autenticarsi per lanciare «$(program)» come super utente"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
++msgstr "È richiesto autenticarsi per lanciare «$(cmdline_short)» come super utente"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -173,9 +173,9 @@ msgstr "È richiesto autenticarsi per lanciare «$(program)» come super utente"
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:800
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"È richiesto autenticarsi per lanciare «$(program)» come l'utente $(user."
++"È richiesto autenticarsi per lanciare «$(cmdline_short)» come l'utente $(user."
+ "display)"
+ 
+ #: ../src/programs/pkttyagent.c:45
+diff --git a/po/nl.po b/po/nl.po
+index b30acee..53277f5 100644
+--- a/po/nl.po
++++ b/po/nl.po
+@@ -160,9 +160,9 @@ msgstr "%s: Onderwerp niet opgegeven\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: src/programs/pkexec.c:807
+-msgid "Authentication is needed to run `$(program)' as the super user"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
+ msgstr ""
+-"Authenticatie is vereist om `$(program)' uit te voeren als de rootgebruiker"
++"Authenticatie is vereist om `$(cmdline_short)' uit te voeren als de rootgebruiker"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -170,9 +170,9 @@ msgstr ""
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: src/programs/pkexec.c:817
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"Authenticatie is vereist om `$(program)' uit te voeren als gebruiker $(user."
++"Authenticatie is vereist om `$(cmdline_short)' uit te voeren als gebruiker $(user."
+ "display)"
+ 
+ #: src/programs/pkttyagent.c:78
+diff --git a/po/nn.po b/po/nn.po
+index b8c65f2..93466f8 100644
+--- a/po/nn.po
++++ b/po/nn.po
+@@ -158,8 +158,8 @@ msgstr "%s: Prosess må oppgjevast\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:790
+-msgid "Authentication is needed to run `$(program)' as the super user"
+-msgstr "Krev autentisering for å køyra «$(program)» som rotbrukar"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
++msgstr "Krev autentisering for å køyra «$(cmdline_short)» som rotbrukar"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -167,9 +167,9 @@ msgstr "Krev autentisering for å køyra «$(program)» som rotbrukar"
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:800
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"Krev autentisering for å køyra «$(program)» som brukaren $(user.display)"
++"Krev autentisering for å køyra «$(cmdline_short)» som brukaren $(user.display)"
+ 
+ # skip-rule: eksistera
+ #: ../src/programs/pkttyagent.c:78
+diff --git a/po/pt.po b/po/pt.po
+index b64349b..d86e40f 100644
+--- a/po/pt.po
++++ b/po/pt.po
+@@ -160,9 +160,9 @@ msgstr "%s: Sujeito não especificado\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:790
+-msgid "Authentication is needed to run `$(program)' as the super user"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
+ msgstr ""
+-"A autenticação é necessária para executar `$(program)' como o superutilizador"
++"A autenticação é necessária para executar `$(cmdline_short)' como o superutilizador"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -170,9 +170,9 @@ msgstr ""
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:800
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"A autenticação é necessária para executar `$(program)' como o utilizador "
++"A autenticação é necessária para executar `$(cmdline_short)' como o utilizador "
+ "$(user.display)"
+ 
+ #: ../src/programs/pkttyagent.c:45
+diff --git a/po/pt_BR.po b/po/pt_BR.po
+index 0b4b915..47e3985 100644
+--- a/po/pt_BR.po
++++ b/po/pt_BR.po
+@@ -157,9 +157,9 @@ msgstr "%s: Sujeito não especificado\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:790
+-msgid "Authentication is needed to run `$(program)' as the super user"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
+ msgstr ""
+-"A autenticação é necessária para executar `$(program)' como o superusuário"
++"A autenticação é necessária para executar `$(cmdline_short)' como o superusuário"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -167,9 +167,9 @@ msgstr ""
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:800
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"A autenticação é necessária para executar `$(program)' como o usuário  "
++"A autenticação é necessária para executar `$(cmdline_short)' como o usuário  "
+ "$(user.display)"
+ 
+ #: ../src/programs/pkttyagent.c:45
+diff --git a/po/ro.po b/po/ro.po
+index fe33ac2..bcc56da 100644
+--- a/po/ro.po
++++ b/po/ro.po
+@@ -162,9 +162,9 @@ msgstr "%s: Subiect nespecificat\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:790
+-msgid "Authentication is needed to run `$(program)' as the super user"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
+ msgstr ""
+-"Este necesară autentificarea pentru a rula „$(program)” ca administrator"
++"Este necesară autentificarea pentru a rula „$(cmdline_short)” ca administrator"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -172,9 +172,9 @@ msgstr ""
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:800
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"Este necesară autentificarea pentru a rula „$(program)” ca utilizatorul"
++"Este necesară autentificarea pentru a rula „$(cmdline_short)” ca utilizatorul"
+ " $(user.display)"
+ 
+ #: ../src/programs/pkttyagent.c:78
+diff --git a/po/sk.po b/po/sk.po
+index 9fdc224..17c8318 100644
+--- a/po/sk.po
++++ b/po/sk.po
+@@ -160,9 +160,9 @@ msgstr "%s: Predmet nebol určený\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:797
+-msgid "Authentication is needed to run `$(program)' as the super user"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
+ msgstr ""
+-"Na spustenie programu „$(program)“ ako superpoužívateľ sa vyžaduje overenie "
++"Na spustenie programu „$(cmdline_short)“ ako superpoužívateľ sa vyžaduje overenie "
+ "totožnosti"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+@@ -171,9 +171,9 @@ msgstr ""
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:807
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"Na spustenie programu „$(program)“ ako používateľ $(user.display) sa "
++"Na spustenie programu „$(cmdline_short)“ ako používateľ $(user.display) sa "
+ "vyžaduje overenie totožnosti"
+ 
+ #: ../src/programs/pkttyagent.c:45
+diff --git a/po/uk.po b/po/uk.po
+index d1b6c55..f793403 100644
+--- a/po/uk.po
++++ b/po/uk.po
+@@ -160,9 +160,9 @@ msgstr "%s: не вказано суб’єкт\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:790
+-msgid "Authentication is needed to run `$(program)' as the super user"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
+ msgstr ""
+-"Для запуску «$(program)» від імені суперкористувача слід пройти розпізнавання"
++"Для запуску «$(cmdline_short)» від імені суперкористувача слід пройти розпізнавання"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -170,9 +170,9 @@ msgstr ""
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:800
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
+ msgstr ""
+-"Для запуску «$(program)» від імені користувача $(user.display) слід пройти "
++"Для запуску «$(cmdline_short)» від імені користувача $(user.display) слід пройти "
+ "розпізнавання"
+ 
+ #: ../src/programs/pkttyagent.c:78
+diff --git a/po/zh_CN.po b/po/zh_CN.po
+index c69eb27..de000a5 100644
+--- a/po/zh_CN.po
++++ b/po/zh_CN.po
+@@ -150,8 +150,8 @@ msgstr "%s: 主题未指定\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:794
+-msgid "Authentication is needed to run `$(program)' as the super user"
+-msgstr "需要授权：作为超级用户身份运行 \"$(program)\" "
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
++msgstr "需要授权：作为超级用户身份运行 \"$(cmdline_short)\" "
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -159,8 +159,8 @@ msgstr "需要授权：作为超级用户身份运行 \"$(program)\" "
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:804
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
+-msgstr "需要授权：作为用户 \"$(user.display)\" 运行 \"$(program)\" "
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
++msgstr "需要授权：作为用户 \"$(user.display)\" 运行 \"$(cmdline_short)\" "
+ 
+ #: ../src/programs/pkttyagent.c:44
+ msgid "Don't replace existing agent if any"
+diff --git a/po/zh_TW.po b/po/zh_TW.po
+index 580017f..c6b6fc5 100644
+--- a/po/zh_TW.po
++++ b/po/zh_TW.po
+@@ -150,8 +150,8 @@ msgstr "%s：未指定目標\n"
+ #. * of the program e.g.  /bin/bash.
+ #.
+ #: ../src/programs/pkexec.c:797
+-msgid "Authentication is needed to run `$(program)' as the super user"
+-msgstr "必須先核對身份才能以超級使用者執行「$(program)」"
++msgid "Authentication is needed to run `$(cmdline_short)' as the super user"
++msgstr "必須先核對身份才能以超級使用者執行「$(cmdline_short)」"
+ 
+ #. Translators: message shown when trying to run a program as another user.
+ #. * Do not translate the $(program) or $(user) fragments - the former will
+@@ -159,8 +159,8 @@ msgstr "必須先核對身份才能以超級使用者執行「$(program)」"
+ #. * to the user e.g. "John Doe (johndoe)" or "johndoe".
+ #.
+ #: ../src/programs/pkexec.c:807
+-msgid "Authentication is needed to run `$(program)' as user $(user.display)"
+-msgstr "必須先核對身份才能以 $(user.display) 使用者執行「$(program)」"
++msgid "Authentication is needed to run `$(cmdline_short)' as user $(user.display)"
++msgstr "必須先核對身份才能以 $(user.display) 使用者執行「$(cmdline_short)」"
+ 
+ #: ../src/programs/pkttyagent.c:45
+ msgid "Don't replace existing agent if any"
