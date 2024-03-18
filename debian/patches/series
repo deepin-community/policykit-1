@@ -12,3 +12,4 @@ deepin_015_fix_use_difference_authenticate.patch
 fix-016-remove-dependencies.patch
 deepin_018_fix_pkexec_wrong.patch
 deepin_019_fix_change_deepin_auth_interface.patch
+update-po.diff
