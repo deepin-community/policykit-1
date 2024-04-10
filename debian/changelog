@@ -1,3 +1,9 @@
+policykit-1 (123-3deepin4) unstable; urgency=medium
+
+  * polkitagenthelper-deepin: Also execute pthread_kill in SIGTERM sig_handler.
+
+ -- Tianyu Chen <sweetyfish@deepin.org>  Wed, 10 Apr 2024 11:36:38 +0800
+
 policykit-1 (123-3deepin3) unstable; urgency=medium
 
   * update-po.diff: Update po files.
