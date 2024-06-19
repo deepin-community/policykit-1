@@ -1,0 +1,16 @@
+Index: policykit-1/src/polkitbackend/polkitbackendactionpool.c
+===================================================================
+--- policykit-1.orig/src/polkitbackend/polkitbackendactionpool.c
++++ policykit-1/src/polkitbackend/polkitbackendactionpool.c
+@@ -1151,8 +1151,11 @@ _localize (GHashTable *translations,
+ 
+       old_locale = g_strdup (setlocale (LC_ALL, NULL));
+       setlocale (LC_ALL, lang);
++      const char *lang_env = getenv("LANGUAGE");
++      g_setenv ("LANGUAGE", lang, TRUE);
+       result = dgettext (domain, untranslated);
+       setlocale (LC_ALL, old_locale);
++      g_setenv ("LANGUAGE", lang_env, TRUE);
+       g_free (old_locale);
+ 
+       goto out;

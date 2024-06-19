@@ -1,3 +1,9 @@
+policykit-1 (123-3deepin5) unstable; urgency=medium
+
+  * fix the problem that polkitd cannot translate properly
+
+ -- Chengqi E <echengqi@uniontech.com>  Wed, 19 June 2024 13:30:38 +0800
+
 policykit-1 (123-3deepin4) unstable; urgency=medium
 
   * polkitagenthelper-deepin: Also execute pthread_kill in SIGTERM sig_handler.
