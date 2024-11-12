@@ -14,3 +14,4 @@ deepin_018_fix_pkexec_wrong.patch
 deepin_019_fix_change_deepin_auth_interface.patch
 update-po.diff
 deepin_020_fix_translate_error.patch
+0001-fix-pkexec-fails-with-GDBus.Error-org.freedesktop.Po.patch
