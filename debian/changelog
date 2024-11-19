@@ -1,3 +1,9 @@
+policykit-1 (123-3deepin7) unstable; urgency=medium
+
+  * fix helper cannot exit normally
+
+ -- Chengqi E <echengqi@uniontech.com>  Tue, 19 Nov 2024 17:00:38 +0800
+
 policykit-1 (123-3deepin6) unstable; urgency=medium
 
   * fix: pkexec fails with GDBus.Error:org.freedesktop.PolicyKit1.Error.Failed, 

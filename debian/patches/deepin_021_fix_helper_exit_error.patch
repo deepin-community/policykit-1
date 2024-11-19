@@ -1,0 +1,27 @@
+Index: policykit-1/src/polkitagent/polkitagenthelper-deepin.c
+===================================================================
+--- policykit-1.orig/src/polkitagent/polkitagenthelper-deepin.c
++++ policykit-1/src/polkitagent/polkitagenthelper-deepin.c
+@@ -520,6 +520,7 @@ void sig_handler(struct sigaction *act)
+         if (_pda->pid)
+         {
+             pthread_kill(_pda->pid, SIGTERM);
++            _pda->pid = 0;
+         }
+     }
+ }
+@@ -705,7 +706,13 @@ int main(int argc, char *argv[])
+ 
+         g_main_loop_unref(pda->loop);
+         pda->loop = NULL;
+-    } 
++    } else{
++        if (_pda->pid)
++        {
++            pthread_kill(_pda->pid, SIGTERM);
++            _pda->pid = 0;
++        }
++    }
+ 
+     if (pda->successed)
+     {
