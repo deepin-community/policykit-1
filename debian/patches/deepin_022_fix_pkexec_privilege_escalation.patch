@@ -1,0 +1,11 @@
+Index: b/data/polkit-1.in
+===================================================================
+--- a/data/polkit-1.in
++++ b/data/polkit-1.in
+@@ -1,5 +1,5 @@
+ #%PAM-1.0
+-
++session  requisite  deepin_security_verify.so
+ @include common-auth
+ @include common-account
+ @include common-password
