@@ -16,3 +16,4 @@ update-po.diff
 deepin_020_fix_translate_error.patch
 0001-fix-pkexec-fails-with-GDBus.Error-org.freedesktop.Po.patch
 deepin_021_fix_helper_exit_error.patch
+deepin_022_fix_pkexec_privilege_escalation.patch
