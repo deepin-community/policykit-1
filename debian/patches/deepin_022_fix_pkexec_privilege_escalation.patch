@@ -1,0 +1,41 @@
+Index: b/src/programs/pkexec.c
+===================================================================
+--- a/src/programs/pkexec.c
++++ b/src/programs/pkexec.c
+@@ -156,6 +156,7 @@ xdg_runtime_dir_is_owned_by (const char
+ 
+ static gboolean
+ open_session (const gchar *user_to_auth,
++        const gchar *pkexec_cmd_path,
+ 	      uid_t        target_uid)
+ {
+   gboolean ret;
+@@ -182,9 +183,19 @@ open_session (const gchar *user_to_auth,
+       goto out;
+     }
+ 
++  const char *cmdpath_env = g_strdup_printf("PKEXEC_CMDPATH=%s", pkexec_cmd_path);
++  rc = pam_putenv(pam_h, cmdpath_env);
++  if (rc != PAM_SUCCESS)
++    {
++      g_printerr ("pam_putenv() failed: %s\n", pam_strerror (pam_h, rc));
++      g_free(cmdpath_env);
++      goto out;
++    }
++
+   /* open a session */
+   rc = pam_open_session (pam_h,
+                          0); /* flags */
++  g_free(cmdpath_env);
+   if (rc != PAM_SUCCESS)
+     {
+       g_printerr ("pam_open_session() failed: %s\n", pam_strerror (pam_h, rc));
+@@ -993,7 +1004,7 @@ main (int argc, char *argv[])
+    * As evident above, neither su(1) (and, for that matter, nor sudo(8)) does this.
+    */
+ #ifdef POLKIT_AUTHFW_PAM
+-  if (!open_session (pw->pw_name,
++  if (!open_session (pw->pw_name, path,
+ 		     pw->pw_uid))
+     {
+       goto out;
