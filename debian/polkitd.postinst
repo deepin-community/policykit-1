@@ -88,6 +88,7 @@ case "$1" in
 
         set_perms root polkitd 750 /etc/polkit-1/rules.d
         set_perms root root 4755 /usr/lib/polkit-1/polkit-agent-helper-1
+        set_perms root root 4755 /usr/lib/polkit-1/polkit-agent-helper-deepin
 
         # If the polkitd user was newly created or newly added to the polkitd
         # group, the dbus-daemon might not know about that until reloaded.
