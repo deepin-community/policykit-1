@@ -15,3 +15,6 @@ libpolkit-agent-1.so.0 libpolkit-agent-1-0 #MINVER#
  polkit_agent_session_response@Base 0.94
  polkit_agent_text_listener_get_type@Base 0.99
  polkit_agent_text_listener_new@Base 0.99
+ polkit_agent_session_ctrl@Base 126-2
+ polkit_agent_session_new_ex@Base 126-2
+ polkit_agent_session_response_ex@Base 126-2

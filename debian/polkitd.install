@@ -18,3 +18,4 @@ usr/share/man/man8/polkitd.*
 usr/share/polkit-1/actions
 usr/share/polkit-1/policyconfig-1.dtd
 usr/share/polkit-1/rules.d
+usr/lib/polkit-1/polkit-agent-helper-deepin
