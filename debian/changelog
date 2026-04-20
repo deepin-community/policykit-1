@@ -1,56 +1,113 @@
-policykit-1 (123-3deepin8) unstable; urgency=medium
+policykit-1 (126-2deepin2) unstable; urgency=medium
 
-  * fix pkexec run program with root privilege in non-developermode.
+  * fix(patches): add upstream locale fix patch
 
- -- luxinyou <luxinyou@uniontech.com>  Thu, 07 Aug 2025 11:53:38 +0800
+ -- Kun Zhang <zhangkun2@uniontech.com>  Mon, 20 Apr 2026 17:37:16 +0100
 
-policykit-1 (123-3deepin7) unstable; urgency=medium
+policykit-1 (126-2deepin1) unstable; urgency=medium
 
-  * fix helper cannot exit normally
+  * chore(debian): restore deepin patches for upstream 126-2 upgrade
 
- -- Chengqi E <echengqi@uniontech.com>  Tue, 19 Nov 2024 17:00:38 +0800
+ -- Kun Zhang <zhangkun2@uniontech.com>  Mon, 20 Apr 2026 16:37:46 +0100
 
-policykit-1 (123-3deepin6) unstable; urgency=medium
+policykit-1 (126-2) unstable; urgency=medium
 
-  * fix: pkexec fails with GDBus.Error:org.freedesktop.PolicyKit1.Error.Failed, 
-    No session for cookie. 
-    Backport from: https://github.com/polkit-org/polkit/pull/423
+  * Remove obsolete /var/lib/polkit-1/ directory on upgrades
 
- -- chenhuixing <chenhuixing@deepin.org>  Tue, 12 Nov 2024 17:28:38 +0800
+ -- Michael Biebl <biebl@debian.org>  Fri, 17 Jan 2025 20:37:46 +0100
 
-policykit-1 (123-3deepin5) unstable; urgency=medium
+policykit-1 (126-1) unstable; urgency=medium
 
-  * fix the problem that polkitd cannot translate properly
+  * Update upstream source from tag 'upstream/126'
+  * Drop 08_chdir_root.patch, merged upstream
+  * d/rules: use execute_before instead of override
+  * polkitd: drop setting permissions for legacy /var/ directory
+  * polkitd: drop special handling for polkitd-pkla, dropped
+  * Drop gettext patch, merged upstream, and enable it in meson
+  * Drop PAM patch and set os_type to Debian, which enables the same
+    config
+  * Drop sudo group patch and use build config instead
+  * Drop test-namespace-skip.patch, merged upstream
+  * Drop Lintian source override, no longer needed
 
- -- Chengqi E <echengqi@uniontech.com>  Wed, 19 June 2024 13:30:38 +0800
+ -- Luca Boccassi <bluca@debian.org>  Mon, 13 Jan 2025 17:36:43 +0000
 
-policykit-1 (123-3deepin4) unstable; urgency=medium
+policykit-1 (125-2) unstable; urgency=medium
 
-  * polkitagenthelper-deepin: Also execute pthread_kill in SIGTERM sig_handler.
+  * Mark policykit-1-doc as MA foreign
+  * Add patch to gracefully skip unit tests without permission to unshare
 
- -- Tianyu Chen <sweetyfish@deepin.org>  Wed, 10 Apr 2024 11:36:38 +0800
+ -- Luca Boccassi <bluca@debian.org>  Thu, 08 Aug 2024 17:54:02 +0100
 
-policykit-1 (123-3deepin3) unstable; urgency=medium
+policykit-1 (125-1) unstable; urgency=medium
 
-  * update-po.diff: Update po files.
-  * Remove obsolete patches.
+  * Update upstream source from tag 'upstream/125'
+  * Drop patches merged upstream
+  * Drop patch to remove PrivateNetwork=, no longer needed
+  * Adjust Meson option for new syntax
+  * Drop Debian-specific tmpfiles.d and use upstream's
+  * Enable ELF metadata stamping
+  * Update d/copyright, mocklibc has been dropped upstream
 
- -- Tianyu Chen <sweetyfish@deepin.org>  Fri, 15 Mar 2024 19:03:48 +0800
+ -- Luca Boccassi <bluca@debian.org>  Thu, 08 Aug 2024 15:22:22 +0100
 
-policykit-1 (123-3deepin2) unstable; urgency=medium
+policykit-1 (124-3) unstable; urgency=medium
 
-  * d/control: Build-depend on libgtk2.0-dev, libjson-c-dev, libjson-glib-dev,
-    libssl-dev.
+  * Drop transitional package policykit-1 (Closes: #1025540)
+  * Drop fallback for /usr/libexec/polkitd in postinst (Closes: #1070448)
+  * fix: pkexec fails with
+    "GDBus.Error:org.freedesktop.PolicyKit1.Error.Failed: No session for
+    cookie"
+    Patch cherry-picked from upstream Git. (Closes: #1068652)
+  * Drop support for the pkla backend.
+    Drop the legacy polkitd-pkla package.
+    It is no longer maintained upstream and was only meant as a temporary
+    measure to ease the migration from .pkla to JS based rules files.
+  * Bump Standards-Version to 4.7.0
 
- -- Tianyu Chen <sweetyfish@deepin.org>  Thu, 29 Feb 2024 13:32:19 +0800
+ -- Michael Biebl <biebl@debian.org>  Wed, 03 Jul 2024 23:03:15 +0200
 
-policykit-1 (123-3deepin1) unstable; urgency=medium
+policykit-1 (124-2) unstable; urgency=medium
 
-  * Rebase patches for polkitagenthelper-deepin.
-  * Rebase patches for deepin authenticator.
-  * Drop developer mode patches.
+  [ Michael Biebl ]
+  * Drop obsolete lintian override
+  * Build-depend on pkgconf instead of pkg-config
 
- -- Tianyu Chen <sweetyfish@deepin.org>  Wed, 21 Feb 2024 22:16:33 +0800
+  [ Simon McVittie ]
+  * d/control: Change policykit-1 dependencies from "equal" to "at least"
+    Having transitional packages depend on package (>= x) instead
+    of package (= x) means that the transitional package can remain
+    installed on user systems even after it has been obsoleted and
+    removed, if it's required by third-party software.
+  * d/p/Turn-local-modifications-of-mocklibc-into-patches-and-app.patch:
+    Add patch to fix FTBFS caused by an implicit declaration.
+    Thanks to Michael Biebl (Closes: #1066531)
+  * d/.gitignore: Add
+  * d/control: Explicitly build-depend on gir1.2-gio-2.0-dev
+  * d/control: Add ${gir:Depends}, ${gir:Provides} to all relevant packages
+  * d/control: Stop build-depending on libgirepository1.0-dev.
+    This is unnecessary now that we depend on gir1.2-gio-2.0-dev and
+    a new enough gobject-introspection.
+  * d/rules: Enable cross-compilation of gobject-introspection data
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 16 Mar 2024 19:22:27 +0000
+
+policykit-1 (124-1) unstable; urgency=medium
+
+  * Migrate upstream metadata and sources to Github
+  * New upstream release
+  * Upstream now installs pam.d snippet directly in /usr/lib, drop
+    redirection
+  * Upstream now ships sysusers.d, drop local copy
+  * Bump copyright year ranges in d/copyright
+  * Build-depend on systemd-dev and use pkg-config instead of hard-coding
+    unit installation directory
+  * Update symbols file for 124
+  * Override Lintian warning about redundant globbing
+  * Drop d/u/signing-key.asc, releases no longer signed
+  * Add myself to Uploaders
+
+ -- Luca Boccassi <bluca@debian.org>  Sun, 21 Jan 2024 10:42:09 +0000
 
 policykit-1 (123-3) unstable; urgency=medium
 

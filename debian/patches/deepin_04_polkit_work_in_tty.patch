@@ -1,0 +1,20 @@
+diff --git a/src/polkitagent/polkitagenttextlistener.c b/src/polkitagent/polkitagenttextlistener.c
+index 61fe6e2..ebe06fb 100644
+--- a/src/polkitagent/polkitagenttextlistener.c
++++ b/src/polkitagent/polkitagenttextlistener.c
+@@ -292,6 +292,7 @@ on_completed (PolkitAgentSession *session,
+ {
+   PolkitAgentTextListener *listener = POLKIT_AGENT_TEXT_LISTENER (user_data);
+ 
++  polkit_agent_session_ctrl(session, -1, SESSION_CTRL_CLOSE);
+   if (listener->use_color)
+     fprintf (listener->tty, "\x1B[1;31m");
+   if (gained_authorization)
+@@ -646,6 +647,7 @@ polkit_agent_text_listener_initiate_authentication (PolkitAgentListener  *_liste
+                                                NULL);
+ 
+   polkit_agent_session_initiate (listener->active_session);
++  polkit_agent_session_ctrl(listener->active_session, -1, SESSION_CTRL_OPEN);
+ 
+  out:
+   ;
