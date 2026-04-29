@@ -1,5 +1,6 @@
 policykit-1 (126-2deepin2) unstable; urgency=medium
 
+  * fix(polkit): fix locale not restored after authentication challenge
   * fix(patches): add upstream locale fix patch
 
  -- Kun Zhang <zhangkun2@uniontech.com>  Mon, 20 Apr 2026 17:37:16 +0100
