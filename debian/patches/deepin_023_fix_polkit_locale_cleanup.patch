@@ -1,0 +1,77 @@
+diff --git a/src/polkitbackend/polkitbackendinteractiveauthority.c b/src/polkitbackend/polkitbackendinteractiveauthority.c
+index 0baab54..201476e 100644
+--- a/src/polkitbackend/polkitbackendinteractiveauthority.c
++++ b/src/polkitbackend/polkitbackendinteractiveauthority.c
+@@ -2065,20 +2065,35 @@ get_localized_data_for_challenge (PolkitBackendInteractiveAuthority *authority,
+   *out_localized_icon_name = NULL;
+   *out_localized_details = NULL;
+ 
+-  action_desc = polkit_backend_action_pool_get_action (priv->action_pool,
+-                                                       action_id,
+-                                                       locale);
+-  if (action_desc == NULL)
+-    goto out;
+-
+-  /* Set LANG and locale so g_dgettext() + friends work below */
++  /* Set locale and LANGUAGE BEFORE action_pool_get_action(), because the patched
++   * _localize() (02_gettext.patch) uses dgettext() which requires a non-C
++   * setlocale to honor the LANGUAGE env var.  If setlocale to the agent's
++   * locale fails, fall back to the process initial locale from LANG so that
++   * LANGUAGE can still take effect. */
+   if (setlocale (LC_ALL, locale) == NULL)
+     {
+-      g_printerr ("Invalid locale '%s'\n", locale);
++      const gchar *lang_env = g_getenv ("LANG");
++      g_warning ("setlocale('%s') failed, trying LANG='%s'", locale, lang_env ? lang_env : "(null)");
++      if (lang_env != NULL && setlocale (LC_ALL, lang_env) == NULL)
++        {
++          g_warning ("setlocale('%s') also failed, locale stays as '%s'", lang_env, setlocale (LC_ALL, NULL));
++        }
++      /* setlocale failed, glibc didn't increment _nl_msg_cat_cntr, so
++       * gettext will use stale cached catalogs.  Force a reload so that
++       * LANGUAGE env var is re-evaluated. */
++      {
++        extern int _nl_msg_cat_cntr;
++        ++_nl_msg_cat_cntr;
++      }
+     }
+-  /* if LANGUAGE have been set in /etc/default, set LANG is invalid. */
+   g_setenv ("LANGUAGE", locale, TRUE);
+ 
++  action_desc = polkit_backend_action_pool_get_action (priv->action_pool,
++                                                        action_id,
++                                                        locale);
++  if (action_desc == NULL)
++    goto out;
++
+   gettext_domain = polkit_details_lookup (details, "polkit.gettext_domain");
+   message_to_use = polkit_details_lookup (details, "polkit.message");
+   if (message_to_use != NULL)
+@@ -2106,9 +2121,24 @@ get_localized_data_for_challenge (PolkitBackendInteractiveAuthority *authority,
+       g_free (s);
+     }
+ 
+-  /* Back to C! */
+-  setlocale (LC_ALL, "C");
+-  g_setenv ("LANGUAGE", "C", TRUE);
++  /* Restore locale to the process default (from LANG), not to "C".
++   * glibc's dgettext() ignores the LANGUAGE env var when setlocale is "C",
++   * and setting LANGUAGE="" causes gettext to cache the setlocale-based
++   * translation, making subsequent LANGUAGE overrides ineffective.
++   * Restore both setlocale and LANGUAGE to the process LANG value. */
++  {
++    const gchar *restore_locale = g_getenv ("LANG");
++    if (restore_locale != NULL)
++      {
++        setlocale (LC_ALL, restore_locale);
++        g_setenv ("LANGUAGE", restore_locale, TRUE);
++      }
++    else
++      {
++        setlocale (LC_ALL, "C");
++        g_setenv ("LANGUAGE", "C", TRUE);
++      }
++  }
+ 
+  out:
+   if (message == NULL)
