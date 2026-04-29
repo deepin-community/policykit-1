@@ -1,3 +1,9 @@
+policykit-1 (123-3deepin9) unstable; urgency=medium
+
+  * fix(polkit): fix locale not restored after authentication challenge
+
+ -- Kun Zhang <zhangkun2@uniontech.com>  Wed, 29 Apr 2025 11:03:38 +0800
+
 policykit-1 (123-3deepin8) unstable; urgency=medium
 
   * fix pkexec run program with root privilege in non-developermode.
