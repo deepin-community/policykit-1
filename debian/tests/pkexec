@@ -31,7 +31,6 @@ stop_polkitd () {
         # system service and is not managed by a service manager, so this is
         # the best we can do
         start-stop-daemon --stop --oknodo --quiet --exec /usr/lib/polkit-1/polkitd || true
-        start-stop-daemon --stop --oknodo --quiet --exec /usr/libexec/polkitd || true
     fi
 }
 
