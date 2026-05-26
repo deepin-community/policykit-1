@@ -1,3 +1,12 @@
+policykit-1 (123-3deepin9) unstable; urgency=medium
+
+  * Fix CVE-2025-7519: XML parsing overflow with nested policy files.
+    When processing an XML policy with 32 or more nested elements in depth,
+    an out-of-bounds write can be triggered leading to crash or unexpected
+    behavior.
+
+ -- deepin-ci-robot <packages@deepin.org>  Mon, 26 May 2026 23:45:00 +0800
+
 policykit-1 (123-3deepin8) unstable; urgency=medium
 
   * fix pkexec run program with root privilege in non-developermode.

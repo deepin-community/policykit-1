@@ -1,0 +1,24 @@
+Description: Fix XML parsing overflow with nested policy files (CVE-2025-7519)
+ When processing an XML policy with 32 or more nested elements in depth,
+ an out-of-bounds write can be triggered. This adds a check to prevent
+ stack overflow in XML parsing.
+Origin: upstream, https://github.com/polkit-org/polkit/commit/107d3801361b9f9084f78710178e683391f1d245
+Bug: https://bugzilla.redhat.com/show_bug.cgi?id=2379675
+Forwarded: not-needed
+
+--- a/src/polkitbackend/polkitbackendactionpool.c
++++ b/src/polkitbackend/polkitbackendactionpool.c
+@@ -673,6 +673,12 @@ _start (void *data, const char *el, const char **attr)
+   guint num_attr;
+   ParserData *pd = data;
+ 
++  if (pd->stack_depth < 0 || pd->stack_depth >= PARSER_MAX_DEPTH)
++    {
++      g_warning ("XML parsing reached max depth?");
++      goto error;
++    }
++
+   for (num_attr = 0; attr[num_attr] != NULL; num_attr++)
+     ;
+ 
+
