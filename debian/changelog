@@ -1,3 +1,9 @@
+policykit-1 (126-2deepin4) unstable; urgency=medium
+
+  * Rebuild with LTO enabled (dpkg vendor feature optimize/lto).
+
+ -- tunaichao <tunaichao@uniontech.com>  Thu, 10 Sep 2026 20:06:10 +0800
+
 policykit-1 (126-2deepin3) unstable; urgency=medium
 
   * fix(polkit): fix locale not restored after authentication challenge
