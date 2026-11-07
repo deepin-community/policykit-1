@@ -1,6 +1,7 @@
 policykit-1 (126-2deepin5) unstable; urgency=medium
 
   * Fix CVE-2026-4897: getline() string overflow in polkit-agent-helper-1
+  * Fix CVE-2026-85498: unsanitized underflow in cookie input
 
  -- deepin-ci-robot <packages@deepin.org>  Thu, 12 Nov 2026 19:45:00 +0800
 
