@@ -1,3 +1,12 @@
+policykit-1 (123-3deepin10) unstable; urgency=medium
+
+  * Fix UT-2026-0138: local privilege escalation in polkit-agent-helper-deepin
+    - Restrict user locale.conf imports to validated LANG and LANGUAGE values
+    - Log helper diagnostics via authpriv syslog instead of appending to an
+      environment-controlled path as root
+
+ -- Zhao Fangxun <zhaofangxun@uniontech.com>  Wed, 25 Nov 2026 11:15:00 +0800
+
 policykit-1 (123-3deepin9) unstable; urgency=medium
 
   * fix(polkit): fix locale not restored after authentication challenge

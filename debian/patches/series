@@ -18,3 +18,4 @@ deepin_020_fix_translate_error.patch
 deepin_021_fix_helper_exit_error.patch
 deepin_022_fix_pkexec_privilege_escalation.patch
 deepin_023_fix_polkit_locale_cleanup.patch
+deepin_13_fix_helper_privilege_escalation.patch

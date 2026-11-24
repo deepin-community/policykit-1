@@ -1,0 +1,508 @@
+Description: Fix UT-2026-0138 polkit-agent-helper-deepin local privilege escalation
+ Restrict the locale settings imported from the user controlled
+ ~/.config/locale.conf to validated LANG and LANGUAGE values, and log
+ helper diagnostics through authpriv syslog instead of appending to a
+ user influenced path as root.
+Bug-Deepin: UT-2026-0138
+Forwarded: not-needed
+
+--- a/src/polkitagent/polkitagenthelper-deepin.c
++++ b/src/polkitagent/polkitagenthelper-deepin.c
+@@ -1,4 +1,5 @@
+ #include <stdbool.h>
++#include <errno.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <glib-2.0/glib.h>
+@@ -8,7 +9,7 @@
+ #include "polkitagenthelperprivate.h"
+ #include <signal.h>
+ #include <sys/types.h>
+-#include <pwd.h>
++#include <syslog.h>
+ 
+ #define MAX_BUFF_SIZE (2048)
+ 
+@@ -65,49 +66,10 @@
+     GList *fail_list;
+ } polkit_da_obj;
+ 
+-void helper_log(const char *format, ...)
+-{
+-    char *helper_log_env = getenv("HELPER_LOG");
+-    if (!helper_log_env)
+-    {
+-        return;
+-    }
+-    static FILE *f = NULL;
+-    char buf[MAX_BUFF_SIZE];
+-    memset(buf, 0, MAX_BUFF_SIZE);
+-
+-    char log_path[MAX_BUFF_SIZE];
+-    if (!getenv("USER_UID"))
+-    {
+-        return;
+-    }
+-
+-    sprintf(log_path, "/var/run/user/%s/polkit-helper.log", getenv("USER_UID"));
+-
+-    if (f == NULL)
+-    {
+-        f = fopen(log_path, "a+");
+-        if (!f)
+-        {
+-            return;
+-        }
+-    }
+-
+-    va_list args;
+-    va_start(args, format);
+-    vsprintf(buf, format, args);
+-    va_end(args);
+-
+-    fprintf(f, "%s\n", buf);
+-    fflush(f);
+-}
+-
+ static void
+ send_to_helper(const gchar *str1,
+                const gchar *str2)
+ {
+-    helper_log("in send_to helper: %s %s", str1 ? str1 : "", str2 ? str2 : "");
+-
+     char *escaped;
+     char *tmp;
+     size_t len;
+@@ -251,8 +213,6 @@
+         return false;
+     }
+ 
+-    helper_log("get input data: %s\n", buf);
+-
+     GError *error = NULL;
+     JsonParser *parser = json_parser_new();
+ 
+@@ -305,8 +265,6 @@
+ {
+     polkit_da_obj *pda = (polkit_da_obj *)userdata;
+ 
+-    helper_log("parser success. CTRL: %d, FLAGS: %d\n", pda->hci->op_code, pda->hci->auth_flags);
+-
+     if (pda->hci->op_code == OP_CODE_START)
+     {
+         int failNum = 0;
+@@ -348,10 +306,6 @@
+                 send_to_helper(str, NULL);
+                 free(str);
+             }
+-            else
+-            {
+-                helper_log("no data write");
+-            }
+         }
+     }
+ }
+@@ -360,8 +314,6 @@
+ {
+     polkit_da_obj *pda = (polkit_da_obj *)userdata;
+ 
+-    helper_log("get msg flag: %d, status : %d, msg: %s\n", flag, status, msg);
+-
+     pda->had->msg_type = MSG_TYPE_STATUS;
+     pda->had->status.status_code = status;
+     pda->had->status.auth_flag = flag;
+@@ -462,10 +414,6 @@
+         send_to_helper(str, NULL);
+         free(str);
+     }
+-    else
+-    {
+-        helper_log("no data write");
+-    }
+ 
+     return true;
+ }
+@@ -509,7 +457,6 @@
+ 
+ void sig_handler(struct sigaction *act)
+ {
+-    helper_log("SIGTERM handler invoked");
+     if (_pda)
+     {
+         _pda->exit = true;
+@@ -530,7 +477,7 @@
+     da_error *errors = NULL;
+ 
+     int fail_num = 0;
+-    if (pda)
++    if (pda && pda->da)
+     {
+         da_session_end(pda->da, -1, &fail_num, &errors);
+         da_dbus_proxy_free(pda->da);
+@@ -551,6 +498,7 @@
+     int ret = 0;
+     da_error *errors = NULL;
+     char *cookie = NULL;
++    polkit_da_obj *pda = NULL;
+ 
+     /* clear the entire environment to avoid attacks using with libraries honoring environment variables */
+     if (_polkit_clearenv() != 0)
+@@ -578,27 +526,22 @@
+         goto error;
+     }
+ 
+-    load_default_locale();
++    openlog("polkit-agent-helper-deepin", LOG_PID, LOG_AUTHPRIV);
+ 
+-    char *lang = NULL;
+-    if (!da_get_user_lang(argv[1], &lang)) {
+-        if (lang) {
+-            helper_log("set env LANG = %s", lang);
+-            setenv("LANG", lang, 1);
+-            free(lang);
+-        }
+-    }
++    const char *username = argv[1];
++    load_default_locale();
++    da_load_user_locale(username);
+ 
+     // 注册 SIGTERM 回调
+     if (signal(SIGTERM, sig_handler) == SIG_ERR)
+     {
+-        helper_log("registe SIGTERM ERROR");
++        syslog(LOG_ERR, "Failed to register SIGTERM handler (errno=%d)", errno);
+         goto error;
+     }
+ 
+     cookie = read_cookie(3, argv);
+ 
+-    polkit_da_obj *pda = (polkit_da_obj *)malloc(sizeof(polkit_da_obj));
++    pda = (polkit_da_obj *)malloc(sizeof(polkit_da_obj));
+     memset(pda, 0, sizeof(polkit_da_obj));
+ 
+     _pda = pda;
+@@ -609,31 +552,20 @@
+ 
+     if (!pda->da)
+     {
+-        helper_log("da_dbus_proxy_new error \n");
++        syslog(LOG_ERR, "Failed to connect to the authentication service");
+         goto error;
+     }
+ 
+-    char *username = argv[1];
+     int flags = atoi(argv[3]);
+-    struct passwd *pw = getpwnam(username);
+-    if (pw)
+-    {
+-        char uid[10];
+-        sprintf(uid, "%d", pw->pw_uid);
+-        setenv("USER_UID", uid, 1);
+-    }
+-    da_load_user_locale(username);
+ 
+     // 查询是否锁定
+     da_limit_info *dali = NULL;
+     int limit_num = 0;
+ 
+-    da_set_log_callback(pda->da, helper_log);
+-
+     ret = da_get_limits(pda->da, username, &dali, &limit_num, &errors);
+     if (ret < 0)
+     {
+-        helper_log("da_get_limits error \n");
++        syslog(LOG_ERR, "Failed to query authentication limits (rc=%d)", ret);
+         goto error;
+     }
+ 
+@@ -647,7 +579,7 @@
+         da_limit_info *spec_limit = da_get_auth_limit_info(dali, limit_num, AUTH_FLAG_PASSWORD);
+         if (spec_limit == NULL)
+         {
+-            helper_log("get limit info for password error");
++            syslog(LOG_ERR, "Authentication service returned no password limits");
+             goto error;
+         }
+ 
+@@ -667,7 +599,7 @@
+     ret = da_create_authenticate(pda->da, username, flags, 3, &errors);
+     if (ret < 0)
+     {
+-        helper_log("create authenticate error %s", errors->msg);
++        syslog(LOG_ERR, "Failed to create authentication session (rc=%d)", ret);
+         goto error;
+     }
+ 
+@@ -675,16 +607,16 @@
+     pda->ac_cb = auth_ctrl_callback;
+ 
+     ret = pthread_create(&pda->pid, NULL, parser_ctrl_info_loop, pda);
+-    if (ret < 0)
++    if (ret != 0)
+     {
+-        helper_log("pthread_create error %d\n", ret);
++        syslog(LOG_ERR, "Failed to start authentication input thread (rc=%d)", ret);
+         goto error;
+     }
+ 
+     ret = da_session_signal_connect_status(pda->da, auth_signal_status_callback, pda);
+     if (ret < 0)
+     {
+-        helper_log("da_session_signal_connect_status error %d\n", ret);
++        syslog(LOG_ERR, "Failed to subscribe to authentication status (rc=%d)", ret);
+         goto error;
+     }
+ 
+@@ -698,7 +630,7 @@
+ 
+         if (!pda->loop)
+         {
+-            helper_log("main loop is NULL");
++            syslog(LOG_ERR, "Failed to create authentication event loop");
+             goto error;
+         }
+ 
+@@ -718,7 +650,7 @@
+     {
+         if (!send_dbus_message(cookie, username))
+         {
+-            helper_log("polkit-agent-helper-deepin: error sending D-Bus message to PolicyKit daemon\n");
++            syslog(LOG_ERR, "Failed to report authentication result to PolicyKit");
+             free(cookie);
+             goto error;
+         }
+--- a/src/libda/auth/text.c
++++ b/src/libda/auth/text.c
+@@ -1,4 +1,8 @@
++#ifndef _GNU_SOURCE
++#define _GNU_SOURCE
++#endif
+ #include "auth-priv.h"
++#include <fcntl.h>
+ #include <libintl.h>
+ #include <pwd.h>
+ #include <limits.h>
+@@ -108,48 +112,112 @@
+     return 0;
+ }
+ 
++/* Skip malformed or oversized lines without treating their tails as settings. */
++static bool read_locale_line(FILE *file, char *line, size_t size) {
++    size_t length = 0;
++    bool valid = true;
++    int ch;
++
++    while ((ch = fgetc(file)) != EOF && ch != '\n') {
++        if (ch == '\0' || length == size - 1) {
++            valid = false;
++        } else if (valid) {
++            line[length++] = ch;
++        }
++    }
++
++    line[valid ? length : 0] = '\0';
++    return ch != EOF || (length > 0 && !ferror(file));
++}
++
++static bool valid_locale_value(const char *value, bool language_list) {
++    if (!g_ascii_isalpha(*value)) {
++        return false;
++    }
++
++    for (const char *p = value; *p != '\0'; p++) {
++        if (language_list && *p == ':' && g_ascii_isalpha(p[1])) {
++            continue;
++        }
++        if (!g_ascii_isalnum(*p) && *p != '_' && *p != '.' && *p != '@' && *p != '-') {
++            return false;
++        }
++    }
++
++    return true;
++}
++
+ void da_load_user_locale(const char *username) {
+-    const char *locale_path = ".config/locale.conf";
+-    struct passwd *p;
+-    if ((p = getpwnam(username)) == NULL) {
++    struct passwd *user = getpwnam(username);
++    if (user == NULL) {
+         return;
+     }
+-    size_t path_len = strlen(p->pw_dir) + strlen(locale_path) + 2; // 2: '/' + '\0'
+-    if (path_len > PATH_MAX) {
++
++    char path[PATH_MAX];
++    if (g_snprintf(path, sizeof(path), "%s/.config", user->pw_dir) >= (int)sizeof(path)) {
+         return;
+     }
+-    char *buff = malloc(MAX_BUFF_SIZE);
+-    strcpy(buff, p->pw_dir);
+-    strcat(buff, "/");
+-    strcat(buff, locale_path);
+-    struct stat locale_file_stat;
+-    stat(buff, &locale_file_stat);
+-    if (!S_ISREG(locale_file_stat.st_mode)) {
+-        free(buff);
++
++    int dir_fd = open(path, O_RDONLY | O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW);
++    if (dir_fd < 0) {
++        return;
++    }
++
++    int fd = openat(dir_fd, "locale.conf",
++                    O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK | O_NOCTTY);
++    close(dir_fd);
++    if (fd < 0) {
+         return;
+     }
+-    FILE *f;
+-    if ((f = fopen(buff, "r")) == NULL) {
+-        free(buff);
++
++    struct stat st;
++    if (fstat(fd, &st) != 0 || !S_ISREG(st.st_mode) || st.st_uid != user->pw_uid) {
++        close(fd);
++        return;
++    }
++
++    FILE *file = fdopen(fd, "r");
++    if (file == NULL) {
++        close(fd);
+         return;
+     }
+-    char *pos = NULL;
+ 
+-    while (fgets(buff, MAX_BUFF_SIZE, f) != NULL) {
+-        if ((pos = strchr(buff, '\n')) != NULL) {
+-            *pos = '\0';
++    char line[MAX_BUFF_SIZE];
++    while (read_locale_line(file, line, sizeof(line))) {
++        char *separator = strchr(line, '=');
++        if (separator == NULL) {
++            continue;
++        }
++
++        *separator = '\0';
++        char *name = g_strstrip(line);
++        bool language_list = strcmp(name, "LANGUAGE") == 0;
++        if (!language_list && strcmp(name, "LANG") != 0) {
++            continue;
+         }
+-        pos = strchr(buff, '=');
+-        if (pos == NULL || buff == pos) {
++
++        char *value = g_strstrip(separator + 1);
++        size_t length = strlen(value);
++        if (length >= 2 && (*value == '\'' || *value == '"') && value[length - 1] == *value) {
++            value[length - 1] = '\0';
++            value++;
++        }
++        if (!valid_locale_value(value, language_list)) {
+             continue;
+         }
+-        *pos = '\0';
+-        char *value = pos + 1;
+-        setenv(buff, value, true);
++
++        if (language_list) {
++            setenv("LANGUAGE", value, 1);
++        } else {
++            locale_t locale = newlocale(LC_ALL_MASK, value, (locale_t)0);
++            if (locale != (locale_t)0) {
++                freelocale(locale);
++                setenv("LANG", value, 1);
++            }
++        }
+     }
+-    fclose(f);
+-    free(buff);
+-    return;
++
++    fclose(file);
+ }
+ 
+ const char *da_success_prompt() {
+@@ -293,71 +358,3 @@
+     *prompt = out_prompt;
+     return 0;
+ }
+-
+-static char *str_trim(const char *str, char c) {
+-    if (!str) {
+-        return NULL;
+-    }
+-    char *s = malloc(strlen(str) + 1);
+-    memset(s, 0, strlen(str) + 1);
+-
+-    int str_i = 0;
+-    int s_i = 0;
+-    while (str[str_i] != '\0') {
+-        if (str[str_i] != c) {
+-            s[s_i++] = str[str_i];
+-        }
+-        str_i++;
+-    }
+-    return s;
+-}
+-
+-int da_get_user_lang(const char *username, char **lang) {
+-    if (!username) {
+-        return -1;
+-    }
+-
+-    struct passwd *pw = getpwnam(username);
+-    if (!pw) {
+-        return -1;
+-    }
+-
+-    char buff[MAX_BUFF_SIZE];
+-    snprintf(buff, MAX_BUFF_SIZE, "%s/.config/locale.conf", pw->pw_dir);
+-    FILE *f = fopen(buff, "r");
+-    if (!f) {
+-        return -1;
+-    }
+-
+-    char *pos = NULL;
+-    while (fgets(buff, MAX_BUFF_SIZE, f) != NULL) {
+-        if ((pos = strchr(buff, '\n')) != NULL) {
+-            *pos = '\0';
+-        }
+-
+-        // buff 不可能为 NULL
+-        char *trim_space = str_trim(buff, ' ');
+-        if (!trim_space) {
+-            continue;
+-        }
+-
+-        strcpy(buff, trim_space);
+-        free(trim_space);
+-
+-        pos = strchr(buff, '=');
+-        if (pos == NULL || buff == pos) {
+-            continue;
+-        }
+-        *pos = '\0';
+-        char *value = pos + 1;
+-        if (strcmp(buff, "LANG") == 0) {
+-            *lang = malloc(strlen(value) + 1);
+-            strcpy(*lang, value);
+-            fclose(f);
+-            return 0;
+-        }
+-    }
+-
+-    fclose(f);
+-    return -2;
+-}
+--- a/src/libda/auth/text.h
++++ b/src/libda/auth/text.h
+@@ -16,8 +16,6 @@
+ int da_get_fail_prompt(da_proxy *proxy, DA_AUTH_FLAG auth_flag,
+                        bool with_retry_info, char **prompt);
+ 
+-int da_get_user_lang(const char *username, char **lang);
+-
+ #ifdef __cplusplus
+ }
+ #endif
