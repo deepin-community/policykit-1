@@ -12,3 +12,4 @@ deepin_11_fix_locale_override.patch
 deepin_12_fix_polkit_locale_cleanup.patch
 cve_2026_4897.patch
 CVE-2026-85498.patch
+deepin_13_fix_helper_privilege_escalation.patch
